@@ -1,0 +1,118 @@
+name: blur_gen_multi_step_1
+model_type: Blur_generative_model
+scale: 1
+num_gpu: 6 # set num_gpu: 0 for cpu mode
+manual_seed: 10
+
+
+# dataset and data loader settings
+datasets:
+  train:
+    name: GoPro
+    type: PairedImageDataset
+
+    dataroot_gt: ./datasets/GoPro/train/sharp
+    dataroot_lq: ./datasets/GoPro/train/blur
+
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+
+    gt_size: 256
+    use_flip: true
+    use_rot: true
+
+    # data loader
+    use_shuffle: true
+    num_worker_per_gpu: 8
+    batch_size_per_gpu: 4
+    dataset_enlarge_ratio: 1
+    prefetch_mode: 'cuda'
+    pin_memory: true
+
+  val:
+    name: GoPro
+    type: PairedImageDataset
+    dataroot_gt: ./datasets/GoPro/test/sharp
+    dataroot_lq: ./datasets/GoPro/test/blur
+    io_backend:
+      type: disk
+
+
+
+# network structures  
+## TODO  ##
+network_g:
+  type: UFPNet_gen_kernel_arch_Local
+  width: 64
+  enc_blk_nums: [1, 1, 1, 28]   # 마지막층은 안봄, 일부러 1이 아닌 수를 넣은것 같다
+  middle_blk_num: 1
+  dec_blk_nums: [1, 1, 1, 1]
+
+
+# path
+path:
+  pretrain_network_g: ~
+  strict_load_g: true
+  resume_state: ~
+
+
+# training settings
+train:
+  optim_g:
+    type: AdamW
+    lr: !!float 1e-3
+    weight_decay: !!float 1e-3
+    betas: [0.9, 0.9]
+
+  scheduler:
+    type: MultiStepRestartLR
+    milestones: [2000,4000,8000,15000,25000]
+    gamma: 0.1
+
+  total_iter: 30000
+  warmup_iter: -1 # no warm up
+
+  # losses  
+  # pixel_opt:
+  #   type: PSNRLoss
+  #   loss_weight: 1
+  #   reduction: mean
+
+  reblur_opt:
+    type: L1Loss
+    loss_weight: 1
+    reduction: mean
+    
+
+
+
+# validation settings
+val:
+  val_freq: !!float 1e4
+  save_img: false
+
+
+  metrics:
+    psnr: # metric name, can be arbitrary
+      type: calculate_psnr
+      crop_border: 0
+      test_y_channel: false
+    ssim:
+      type: calculate_ssim
+      crop_border: 0
+      test_y_channel: false
+
+# logging settings
+logger:
+  print_freq: 100
+  save_checkpoint_freq: !!float 5e3
+  use_tb_logger: true
+  wandb:
+    project: UFP_gen_multistep
+    resume_id: aodwndhks
+
+# dist training settings
+dist_params:
+  backend: nccl
+  port: 29500

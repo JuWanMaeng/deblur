@@ -1,0 +1,51 @@
+{
+    // IntelliSense를 사용하여 가능한 특성에 대해 알아보세요.
+    // 기존 특성에 대한 설명을 보려면 가리킵니다.
+    // 자세한 내용을 보려면 https://go.microsoft.com/fwlink/?linkid=830387을(를) 방문하세요.
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Test",
+            "type": "python",
+            "request": "launch",
+            "program": "test.py",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Test2",
+            "type": "python",
+            "request": "launch",
+            "program": "test2.py",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "my Train",
+            "type": "python",
+            "request": "launch",
+            "program": "train_dist.py",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Train_dist",
+            "type": "python",
+            "request": "launch",
+            "program": "train_dist.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            // "args": [
+            //     "--launcher", "pytorch"
+            // ]
+        },
+        {
+            "name": "Train",
+            "type": "python",
+            "request": "launch",
+            "program": "train.py",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+    ]
+}

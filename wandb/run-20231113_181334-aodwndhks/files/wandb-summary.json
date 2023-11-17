@@ -1,0 +1,1 @@
+{"losses/l_pix": -36.25650405883789, "metrics/m_ssim": 0.9564040899276732, "losses/l_reblur": 0.002843631198629737, "_runtime": 564689.608191967, "global_step": 8935, "_timestamp": 1691720623.631058, "metrics/m_psnr": 32.79167556762695, "_step": 1116}

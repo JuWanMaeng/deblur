@@ -1,0 +1,11 @@
+*.jpg
+*.png
+*.pt
+*.bin
+*.tar
+*.npy
+*.log
+*.wandb
+*.pt
+*.pth
+*.state
